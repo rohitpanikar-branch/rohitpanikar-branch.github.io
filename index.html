@@ -60,6 +60,8 @@
     <button id="share-btn">Share</button>
   </div>
 
+  <input type="text" id="link-output" readonly placeholder="Your Branch link will appear here" style="width: 320px; padding: 10px; margin-bottom: 24px; border: 1px solid #ccc; border-radius: 6px;">
+
   <div class="product-card">
     <div style="font-size: 64px;">⛳️</div>
     <h3>Golf Ball</h3>
@@ -67,6 +69,8 @@
   </div>
 
   <button id="purchase-btn">Purchase</button>
+
+  <p id="purchase-message" style="font-weight: bold; color: #2ecc71;"></p>
 
   <script>
     // 1. setIdentity - associate the current device/session with a user
@@ -120,6 +124,8 @@
       createBranchLink(function(err, link) {
         if (err || !link) return;
 
+        document.getElementById("link-output").value = link;
+
         if (navigator.share) {
           navigator.share({
             title: "Golf Ball",
@@ -149,7 +155,11 @@
 
     // Wire up buttons
     document.getElementById("create-btn").addEventListener("click", function() {
-      createBranchLink();
+      createBranchLink(function(err, link) {
+        if (!err && link) {
+          document.getElementById("link-output").value = link;
+        }
+      });
       trackEvent("CREATE_LINK", { product: "golf_ball" });
     });
 
@@ -159,6 +169,7 @@
     });
 
     document.getElementById("purchase-btn").addEventListener("click", function() {
+      document.getElementById("purchase-message").textContent = "Purchased!";
       trackEvent("PURCHASE", {
         product: "golf_ball",
         price: 2.99,
