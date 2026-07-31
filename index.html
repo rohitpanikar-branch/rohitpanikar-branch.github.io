@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rohit's WebSDK Testing</title>
+<script>
+   // Load Branch
+   (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode setRequestMetaData setAPIUrl getAPIUrl setDMAParamsForEEA".split(" "), 0);
+</script>
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -62,6 +67,105 @@
   </div>
 
   <button id="purchase-btn">Purchase</button>
+
+  <script>
+    // 1. setIdentity - associate the current device/session with a user
+    branch.setIdentity("rohit-user-id");
+
+    // 2. Initialize Branch
+    branch.init('key_test_jsxSAhfdZDtg8I7YrUmXbnaeBqoy5XFk', {
+        // This is the data object that will be attached to the deep link
+        data: {
+            id: 'rohit-user-id',
+            example: 'rohit-testing-web-sdk'
+        },
+        // The `listen` option ensures Journeys/Branch Views are displayed
+        listen: true
+    }, function(err, data) {
+        if (err) {
+            // Handle initialization error
+            console.error('Branch Init Error:', err);
+            return;
+        }
+        // Initialization success, and Journeys should be ready to display
+        console.log('Branch Init Data:', data);
+    });
+
+    // 3. Create a Branch link
+    function createBranchLink(callback) {
+      var linkData = {
+        campaign: "web_sdk_testing",
+        channel: "website",
+        feature: "share",
+        data: {
+          "$og_title": "Golf Ball",
+          "$og_description": "Check out this golf ball!",
+          "$canonical_identifier": "product/golf-ball",
+          product: "golf_ball"
+        }
+      };
+
+      branch.link(linkData, function(err, link) {
+        if (err) {
+          console.error("branch.link error:", err);
+        } else {
+          console.log("Created Branch link:", link);
+        }
+        if (callback) callback(err, link);
+      });
+    }
+
+    // 4. Share a Branch link (create then share, e.g. via Web Share API)
+    function shareBranchLink() {
+      createBranchLink(function(err, link) {
+        if (err || !link) return;
+
+        if (navigator.share) {
+          navigator.share({
+            title: "Golf Ball",
+            text: "Check out this golf ball!",
+            url: link
+          }).catch(function(shareErr) {
+            console.error("Share error:", shareErr);
+          });
+        } else {
+          // Fallback for browsers without Web Share API support
+          console.log("Share this link:", link);
+        }
+      });
+    }
+
+    // 5. Event tracking
+    // Standard/custom events: https://help.branch.io/developers-hub/docs/tracking-events
+    function trackEvent(eventName, eventData) {
+      branch.logEvent(eventName, eventData || {}, function(err) {
+        if (err) {
+          console.error("logEvent error:", err);
+        } else {
+          console.log("Tracked event:", eventName, eventData);
+        }
+      });
+    }
+
+    // Wire up buttons
+    document.getElementById("create-btn").addEventListener("click", function() {
+      createBranchLink();
+      trackEvent("CREATE_LINK", { product: "golf_ball" });
+    });
+
+    document.getElementById("share-btn").addEventListener("click", function() {
+      shareBranchLink();
+      trackEvent("SHARE", { product: "golf_ball" });
+    });
+
+    document.getElementById("purchase-btn").addEventListener("click", function() {
+      trackEvent("PURCHASE", {
+        product: "golf_ball",
+        price: 2.99,
+        currency: "USD"
+      });
+    });
+  </script>
 
 </body>
 </html>
