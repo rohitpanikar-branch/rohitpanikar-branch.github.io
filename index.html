@@ -1,182 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rohit's WebSDK Testing</title>
-<script>
-   // Load Branch
-   (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode setRequestMetaData setAPIUrl getAPIUrl setDMAParamsForEEA".split(" "), 0);
-</script>
-<style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    background: #f5f5f5;
-  }
-  h1 {
-    color: #222;
-  }
-  .button-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  button {
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #4a90e2;
-    color: white;
-  }
-  .product-card {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    text-align: center;
-    width: 220px;
-    margin-bottom: 20px;
-  }
-  .product-card img {
-    width: 100px;
-    height: 100px;
-  }
-  #purchase-btn {
-    background: #2ecc71;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ForeTees Country Club - Member Login</title>
+    <script>
+        // Load Branch
+        (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode setRequestMetaData setAPIUrl getAPIUrl setDMAParamsForEEA".split(" "), 0);
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+
+            /* Update the background block: */
+            /* Add the fallback color first, then your overlay, then the image URL */
+            background-color: #1a3628; /* Original green background fallback */
+            background-image:
+                linear-gradient(rgba(26, 54, 40, 0.7), rgba(26, 54, 40, 0.7)), /* 70% dark green overlay */
+                url('ft-background.png'); /* The name of the file you saved */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Top Navigation Banner */
+        .top-banner {
+            background-color: rgba(28, 69, 50, 0.95); /* Country Club Green */
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Slide-out Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-menu.open {
+            left: 0;
+        }
+
+        .menu-header {
+            background-color: #1c4532;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu-links {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .menu-links li a {
+            display: block;
+            padding: 16px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .menu-links li a:hover {
+            background-color: #f4f6f4;
+            color: #1c4532;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1050;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        /* Main Content Container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            width: 100%; 
+            max-width: 360px; 
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #2c3e50; 
+            font-size: 19px; 
+            margin-top: 0;
+            margin-bottom: 20px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: #4a5568; 
+            font-size: 14px; 
+            font-weight: 500;
+        }
+        
+        input[type="text"], input[type="password"] { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #cbd5e0; 
+            border-radius: 6px; 
+            font-size: 16px;
+            background: #fff;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #276749;
+        }
+        
+        button.login-btn { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #276749; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            font-weight: bold;
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: background-color 0.2s;
+        }
+        
+        button.login-btn:hover { 
+            background-color: #1c4532; 
+        }
+    </style>
+
+    <!-- Branch Web SDK Initialization -->
+    <script>
+        // 1. setIdentity - associate the current device/session with a user
+        branch.setIdentity("rohit-user-id");
+
+        // 2. Initialize Branch
+        branch.init('key_test_jsxSAhfdZDtg8I7YrUmXbnaeBqoy5XFk', {
+            // This is the data object that will be attached to the deep link
+            data: {
+                id: 'rohit-user-id',
+                example: 'rohit-testing-web-sdk'
+            },
+            // The `listen` option ensures Journeys/Branch Views are displayed
+            listen: true
+        }, function(err, data) {
+            if (err) {
+                // Handle initialization error
+                console.error('Branch Init Error:', err);
+                return;
+            }
+            // Initialization success, and Journeys should be ready to display
+            console.log('Branch Init Data:', data);
+     });
+    </script>
 </head>
 <body>
-  <h1>Rohit's WebSDK Testing</h1>
 
-  <div class="button-row">
-    <button id="create-btn">Create</button>
-    <button id="share-btn">Share</button>
-  </div>
+    <!-- Top Banner -->
+    <header class="top-banner">
+        <button class="hamburger-btn" id="menuToggle" aria-label="Open Menu">&#9776;</button>
+        <div class="brand-title">ForeTees Country Club</div>
+        <div style="width: 24px;"></div> <!-- Balances layout alignment -->
+    </header>
 
-  <input type="text" id="link-output" readonly placeholder="Your Branch link will appear here" style="width: 320px; padding: 10px; margin-bottom: 24px; border: 1px solid #ccc; border-radius: 6px;">
+    <!-- Slide-out Menu Panel -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <nav class="mobile-menu" id="mobileMenu">
+        <div class="menu-header">
+            <span>Menu</span>
+            <button class="close-btn" id="menuClose">&times;</button>
+        </div>
+        <ul class="menu-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Tee Times</a></li>
+            <li><a href="#">Dining & Events</a></li>
+            <li><a href="#">Member Directory</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+    </nav>
 
-  <div class="product-card">
-    <div style="font-size: 64px;">⛳️</div>
-    <h3>Golf Ball</h3>
-    <p>$2.99</p>
-  </div>
+    <!-- Content Container -->
+    <div class="main-container">
+        <div class="container">
+            <h1>Member Login</h1>
+            <div class="form-group">
+                <label for="username">Member ID</label>
+                <input type="text" id="username" placeholder="Enter your Member ID">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button type="button" class="login-btn">Log In</button>
+        </div>
+    </div>
 
-  <button id="purchase-btn">Purchase</button>
+    <!-- Toggle Script for Hamburger Menu -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const menuClose = document.getElementById('menuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
 
-  <p id="purchase-message" style="font-weight: bold; color: #2ecc71;"></p>
-
-  <script>
-    // 1. setIdentity - associate the current device/session with a user
-    branch.setIdentity("rohit-user-id");
-
-    // 2. Initialize Branch
-    branch.init('key_test_jsxSAhfdZDtg8I7YrUmXbnaeBqoy5XFk', {
-        // This is the data object that will be attached to the deep link
-        data: {
-            id: 'rohit-user-id',
-            example: 'rohit-testing-web-sdk'
-        },
-        // The `listen` option ensures Journeys/Branch Views are displayed
-        listen: true
-    }, function(err, data) {
-        if (err) {
-            // Handle initialization error
-            console.error('Branch Init Error:', err);
-            return;
+        function toggleMenu() {
+            mobileMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('active');
         }
-        // Initialization success, and Journeys should be ready to display
-        console.log('Branch Init Data:', data);
-    });
 
-    // 3. Create a Branch link
-    function createBranchLink(callback) {
-      var linkData = {
-        campaign: "web_sdk_testing",
-        channel: "website",
-        feature: "share",
-        data: {
-          "$og_title": "Golf Ball",
-          "$og_description": "Check out this golf ball!",
-          "$canonical_identifier": "product/golf-ball",
-          product: "golf_ball"
-        }
-      };
-
-      branch.link(linkData, function(err, link) {
-        if (err) {
-          console.error("branch.link error:", err);
-        } else {
-          console.log("Created Branch link:", link);
-        }
-        if (callback) callback(err, link);
-      });
-    }
-
-    // 4. Share a Branch link (create then share, e.g. via Web Share API)
-    function shareBranchLink() {
-      createBranchLink(function(err, link) {
-        if (err || !link) return;
-
-        document.getElementById("link-output").value = link;
-
-        if (navigator.share) {
-          navigator.share({
-            title: "Golf Ball",
-            text: "Check out this golf ball!",
-            url: link
-          }).catch(function(shareErr) {
-            console.error("Share error:", shareErr);
-          });
-        } else {
-          // Fallback for browsers without Web Share API support
-          console.log("Share this link:", link);
-        }
-      });
-    }
-
-    // 5. Event tracking
-    // Standard/custom events: https://help.branch.io/developers-hub/docs/tracking-events
-    function trackEvent(eventName, eventData) {
-      branch.logEvent(eventName, eventData || {}, function(err) {
-        if (err) {
-          console.error("logEvent error:", err);
-        } else {
-          console.log("Tracked event:", eventName, eventData);
-        }
-      });
-    }
-
-    // Wire up buttons
-    document.getElementById("create-btn").addEventListener("click", function() {
-      createBranchLink(function(err, link) {
-        if (!err && link) {
-          document.getElementById("link-output").value = link;
-        }
-      });
-      trackEvent("CREATE_LINK", { product: "golf_ball" });
-    });
-
-    document.getElementById("share-btn").addEventListener("click", function() {
-      shareBranchLink();
-      trackEvent("SHARE", { product: "golf_ball" });
-    });
-
-    document.getElementById("purchase-btn").addEventListener("click", function() {
-      document.getElementById("purchase-message").textContent = "Purchased!";
-      trackEvent("PURCHASE", {
-        product: "golf_ball",
-        price: 2.99,
-        currency: "USD"
-      });
-    });
-  </script>
-
+        menuToggle.addEventListener('click', toggleMenu);
+        menuClose.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+    </script>
 </body>
 </html>

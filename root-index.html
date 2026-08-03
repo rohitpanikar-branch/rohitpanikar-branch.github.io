@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rohit's WebSDK Testing</title>
+<script>
+   // Load Branch
+   (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode setRequestMetaData setAPIUrl getAPIUrl setDMAParamsForEEA".split(" "), 0);
+</script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background: #f5f5f5;
+  }
+  h1 {
+    color: #222;
+  }
+  .button-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #4a90e2;
+    color: white;
+  }
+  .product-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 220px;
+    margin-bottom: 20px;
+  }
+  .product-card img {
+    width: 100px;
+    height: 100px;
+  }
+  #purchase-btn {
+    background: #2ecc71;
+  }
+</style>
+</head>
+<body>
+  <h1>Rohit's WebSDK Testing</h1>
+
+  <div class="button-row">
+    <button id="create-btn">Create</button>
+    <button id="share-btn">Share</button>
+  </div>
+
+  <input type="text" id="link-output" readonly placeholder="Your Branch link will appear here" style="width: 320px; padding: 10px; margin-bottom: 24px; border: 1px solid #ccc; border-radius: 6px;">
+
+  <div class="product-card">
+    <div style="font-size: 64px;">⛳️</div>
+    <h3>Golf Ball</h3>
+    <p>$2.99</p>
+  </div>
+
+  <button id="purchase-btn">Purchase</button>
+
+  <p id="purchase-message" style="font-weight: bold; color: #2ecc71;"></p>
+
+  <script>
+    // 1. setIdentity - associate the current device/session with a user
+    branch.setIdentity("rohit-user-id");
+
+    // 2. Initialize Branch
+    branch.init('key_test_jsxSAhfdZDtg8I7YrUmXbnaeBqoy5XFk', {
+        // This is the data object that will be attached to the deep link
+        data: {
+            id: 'rohit-user-id',
+            example: 'rohit-testing-web-sdk'
+        },
+        // The `listen` option ensures Journeys/Branch Views are displayed
+        listen: true
+    }, function(err, data) {
+        if (err) {
+            // Handle initialization error
+            console.error('Branch Init Error:', err);
+            return;
+        }
+        // Initialization success, and Journeys should be ready to display
+        console.log('Branch Init Data:', data);
+    });
+
+    // 3. Create a Branch link
+    function createBranchLink(callback) {
+      var linkData = {
+        campaign: "web_sdk_testing",
+        channel: "website",
+        feature: "share",
+        data: {
+          "$og_title": "Golf Ball",
+          "$og_description": "Check out this golf ball!",
+          "$canonical_identifier": "product/golf-ball",
+          product: "golf_ball"
+        }
+      };
+
+      branch.link(linkData, function(err, link) {
+        if (err) {
+          console.error("branch.link error:", err);
+        } else {
+          console.log("Created Branch link:", link);
+        }
+        if (callback) callback(err, link);
+      });
+    }
+
+    // 4. Share a Branch link (create then share, e.g. via Web Share API)
+    function shareBranchLink() {
+      createBranchLink(function(err, link) {
+        if (err || !link) return;
+
+        document.getElementById("link-output").value = link;
+
+        if (navigator.share) {
+          navigator.share({
+            title: "Golf Ball",
+            text: "Check out this golf ball!",
+            url: link
+          }).catch(function(shareErr) {
+            console.error("Share error:", shareErr);
+          });
+        } else {
+          // Fallback for browsers without Web Share API support
+          console.log("Share this link:", link);
+        }
+      });
+    }
+
+    // 5. Event tracking
+    // Standard/custom events: https://help.branch.io/developers-hub/docs/tracking-events
+    function trackEvent(eventName, eventData) {
+      branch.logEvent(eventName, eventData || {}, function(err) {
+        if (err) {
+          console.error("logEvent error:", err);
+        } else {
+          console.log("Tracked event:", eventName, eventData);
+        }
+      });
+    }
+
+    // Wire up buttons
+    document.getElementById("create-btn").addEventListener("click", function() {
+      createBranchLink(function(err, link) {
+        if (!err && link) {
+          document.getElementById("link-output").value = link;
+        }
+      });
+      trackEvent("CREATE_LINK", { product: "golf_ball" });
+    });
+
+    document.getElementById("share-btn").addEventListener("click", function() {
+      shareBranchLink();
+      trackEvent("SHARE", { product: "golf_ball" });
+    });
+
+    document.getElementById("purchase-btn").addEventListener("click", function() {
+      document.getElementById("purchase-message").textContent = "Purchased!";
+      trackEvent("PURCHASE", {
+        product: "golf_ball",
+        price: 2.99,
+        currency: "USD"
+      });
+    });
+  </script>
+
+</body>
+</html>
